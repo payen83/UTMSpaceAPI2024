@@ -14,15 +14,15 @@ How to use this source code
 
 6. At the middle of the screen, go to SQL tab, type the SQL queries below:
 
-7. CREATE DATABASE ispaceDB;
+ CREATE DATABASE ispaceDB;
 
-8. Then click button GO at the bottom
+7. Then click button GO at the bottom
 
-9. Click on the database "ispaceDB" at left side bar.
+8. Click on the database "ispaceDB" at left side bar.
 
-10. Then, at the menu tab in the middle, find the tab name export 
+9. Then, at the menu tab in the middle, find the tab name export 
 
-11. Upload sql file "ispaceDB.sql" and click export
+10. Upload sql file "ispaceDB.sql" and click export
 
 
 How to Test the API
