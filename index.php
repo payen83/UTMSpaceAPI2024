@@ -15,14 +15,32 @@
     set_exception_handler( "ErrorHandler::handleException" );
 
     // Change to JSON Type
-    header( "Access-Control-Allow-Origin: *" );
-    header( "Access-Control-Allow-Headers: *" );
+    // header( "Access-Control-Allow-Origin: *" );
+    // header( "Access-Control-Allow-Headers: *" );
 
     // header( "Access-Control-Allow-Origin: *" );
     // header( "Content-Type: application/json; charset=UTF-8" );
     // header( "Access-Control-Allow-Methods: OPTIONS,GET,POST,PUT,DELETE" );
     // header( "Access-Control-Max-Age: 3600" );
     // header( "Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With" );
+    header('Access-Control-Allow-Origin: *'); // Adjust this to match your actual domain, using '*' is less secure
+    header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS'); // Adjust based on your needs
+    header('Access-Control-Allow-Headers: X-Requested-With, Content-Type, Accept, Origin, Authorization'); // Add any other headers you need to support
+    header('Access-Control-Allow-Credentials: true'); // If you're handling cookies/session
+    
+    // Handle preflight request
+    if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+        // Return only CORS headers for preflight
+        if(isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD'])) // May not be necessary depending on your server
+            header('Access-Control-Allow-Methods: GET, POST, OPTIONS'); // Adjust based on your needs
+    
+        if(isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
+            header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
+    
+        // No further action needed for preflight
+        exit(0);
+    }
+
 
     $parts = explode( "/", $_SERVER[ "REQUEST_URI" ]);
 
