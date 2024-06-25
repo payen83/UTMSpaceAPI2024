@@ -16,14 +16,16 @@ How to use this source code
 
 7. CREATE DATABASE ispaceDB;
 
-8.Then click button GO at the bottom
+8. Then click button GO at the bottom
 
-9. Click on the database "ispaceDB" at left side bar. 
+9. Click on the database "ispaceDB" at left side bar.
+
 10. Then, at the menu tab in the middle, find the tab name export 
+
 11. Upload sql file "ispaceDB.sql" and click export
 
 
 How to Test the API
 - Download and install Postman, make sure you sign up and log in.
-- Open Postman, click on import, then choose Warehouse ispace "api.postman_collection_windows.json" (for Windows) and ispace api.postman_collection_macOS.json (for macOS)  in \api folder 
+- Open Postman, click on import, then choose filename "api.postman_collection_windows.json" (for Windows) or "ispace api.postman_collection_macOS.json" (for macOS)  in \api folder 
 - Run and test API!
