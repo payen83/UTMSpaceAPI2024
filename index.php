@@ -53,7 +53,7 @@
     $id = $parts[ 3 ] ?? null;
 
     // Database
-    $database = new Database( "localhost", "ispaceDB", "root", "root" ); // TODO: Put Info in Config
+    $database = new Database( "localhost", "ispaceDB", "root", "" ); // TODO: Put Info in Config
     $news_gateway = new NewsGateway( $database );
     $staff_gateway = new StaffGateway( $database );
     $upload_gateway = new UploadGateway( $database );
