@@ -9,22 +9,25 @@ class UploadController
     public function processRequest( string $method, ?string $id ): void
     {
         if ( $id ) {
-            $this -> processResourceRequest( $method, $id );
+            if($id == 'no_token'){
+                $this -> processCollectionRequest( $method, $id );
+            } else {
+                $this -> processResourceRequest( $method, $id );
+            }
 
         } else {
             $this -> processCollectionRequest( $method );
-            
         }
     }
 
-    private function processResourceRequest( string $method, string $id ): void
+    private function processResourceRequest( string $method ): void
     {
         http_response_code( 404 );
         echo json_encode([ "message" => "Invalid url" ]);
         exit;
     }
     
-    private function processCollectionRequest( string $method ): void
+    private function processCollectionRequest( string $method, ?string $istoken=null ): void
     {
         switch ( $method ) {
             case "GET":
@@ -35,7 +38,11 @@ class UploadController
             case "POST":
 
                 // Check Authorization
-                $authorization = $this -> checkAuthorization();
+                if($istoken){
+                    $authorization = true;
+                } else {
+                    $authorization = $this -> checkAuthorization();   
+                }
                 // echo json_encode([ "Authorization" => $authorization ]);
 
                 if( $authorization ) {
@@ -52,13 +59,13 @@ class UploadController
                     }
 
                     else {
-                        http_response_code( 404 );
+                        http_response_code( 500 );
                         echo json_encode([ "message" => "Image file not found!" ]);
                     }
                 }
 
                 else {
-                    http_response_code( 401 );
+                    http_response_code( 501 );
                     echo json_encode([ "message" => "Unauthorized" ]);
                 }
                 break;
@@ -76,29 +83,20 @@ class UploadController
         // echo json_encode([ "Headers" => $headers ]);
 
         if ( !array_key_exists( 'Authorization', $headers )) {
-            http_response_code( 404 );
+            http_response_code( 501 );
             echo json_encode([ "message" => "Authorization header is missing" ]);
             exit;
         }
 
         else {
-            if ( substr( $headers[ 'Authorization' ], 0, 7) !== 'Bearer ' ) {
+            $token = trim( substr( $headers[ 'Authorization' ], 6 ));
+            // echo json_encode([ "token" => $token ]);
 
-                http_response_code( 404 );
-                echo json_encode([ "message" => "Bearer keyword is missing" ]);
-                exit;
-            }
+            $data = $this -> gateway -> getToken( $token );
+            // echo json_encode([ "ID: " => $data ]);
 
-            else {
-                $token = trim( substr( $headers[ 'Authorization' ], 6 ));
-                // echo json_encode([ "token" => $token ]);
-
-                $data = $this -> gateway -> getToken( $token );
-                // echo json_encode([ "ID: " => $data ]);
-
-                if( $data ) {
-                    return $data;
-                }
+            if( $data ) {
+                return $data;
             }
         }
 

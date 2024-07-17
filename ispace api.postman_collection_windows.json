@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "844e44e3-97f5-45c9-956c-4b99e1900077",
+		"_postman_id": "118e0331-9f2f-4e63-8ad0-f8b2074334fd",
 		"name": "ispace api",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "1720888"
@@ -24,6 +24,7 @@
 							"host": [
 								"localhost"
 							],
+							"port": "8888",
 							"path": [
 								"api",
 								"login"
@@ -60,11 +61,25 @@
 							"host": [
 								"localhost"
 							],
+							"port": "8888",
 							"path": [
 								"api",
 								"logout"
 							]
 						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Maklumbalas",
+			"item": [
+				{
+					"name": "Create Maklumbalas",
+					"request": {
+						"method": "GET",
+						"header": []
 					},
 					"response": []
 				}
@@ -84,6 +99,7 @@
 							"host": [
 								"localhost"
 							],
+							"port": "8888",
 							"path": [
 								"api",
 								"news"
@@ -103,6 +119,7 @@
 							"host": [
 								"localhost"
 							],
+							"port": "8888",
 							"path": [
 								"api",
 								"news",
@@ -115,16 +132,6 @@
 				{
 					"name": "Create News",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "$2y$10$bfbqvGR6Wixm4y.rRQwmM.wpbPploL6j5qw731gEJIKqDy5m3j/L.",
-									"type": "string"
-								}
-							]
-						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -137,6 +144,7 @@
 							"host": [
 								"localhost"
 							],
+							"port": "8888",
 							"path": [
 								"api",
 								"news"
@@ -160,6 +168,7 @@
 							"host": [
 								"localhost"
 							],
+							"port": "8888",
 							"path": [
 								"api",
 								"news",
@@ -180,6 +189,7 @@
 							"host": [
 								"localhost"
 							],
+							"port": "8888",
 							"path": [
 								"api",
 								"news",
@@ -195,7 +205,7 @@
 				"bearer": [
 					{
 						"key": "token",
-						"value": "$2y$10$CpMYwLc38MdT7e2nKb1V/.NZLLY.ewBXNiv1gIUijPIqJvC21Awua",
+						"value": "$2y$10$OLcG3VL4DQxcAziux3.NjuW.IJeFqesIzeV5jjehSO5h.KwHlAVbq",
 						"type": "string"
 					}
 				]
@@ -237,6 +247,7 @@
 							"host": [
 								"localhost"
 							],
+							"port": "8888",
 							"path": [
 								"api",
 								"staff",
@@ -257,6 +268,7 @@
 							"host": [
 								"localhost"
 							],
+							"port": "8888",
 							"path": [
 								"api",
 								"staff"
@@ -268,16 +280,6 @@
 				{
 					"name": "Create Staff",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "$2y$10$bfbqvGR6Wixm4y.rRQwmM.wpbPploL6j5qw731gEJIKqDy5m3j/L.",
-									"type": "string"
-								}
-							]
-						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -290,6 +292,7 @@
 							"host": [
 								"localhost"
 							],
+							"port": "8888",
 							"path": [
 								"api",
 								"staff"
@@ -301,16 +304,6 @@
 				{
 					"name": "Update Staff",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "$2y$10$bfbqvGR6Wixm4y.rRQwmM.wpbPploL6j5qw731gEJIKqDy5m3j/L.",
-									"type": "string"
-								}
-							]
-						},
 						"method": "PATCH",
 						"header": [],
 						"body": {
@@ -328,6 +321,7 @@
 							"host": [
 								"localhost"
 							],
+							"port": "8888",
 							"path": [
 								"api",
 								"staff",
@@ -340,16 +334,6 @@
 				{
 					"name": "Delete Staff",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "$2y$10$bfbqvGR6Wixm4y.rRQwmM.wpbPploL6j5qw731gEJIKqDy5m3j/L.",
-									"type": "string"
-								}
-							]
-						},
 						"method": "DELETE",
 						"header": [],
 						"url": {
@@ -358,6 +342,7 @@
 							"host": [
 								"localhost"
 							],
+							"port": "8888",
 							"path": [
 								"api",
 								"staff",
@@ -415,6 +400,7 @@
 							"host": [
 								"localhost"
 							],
+							"port": "8888",
 							"path": [
 								"api",
 								"images",
@@ -427,16 +413,6 @@
 				{
 					"name": "Upload Image",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "$2y$10$bfbqvGR6Wixm4y.rRQwmM.wpbPploL6j5qw731gEJIKqDy5m3j/L.",
-									"type": "string"
-								}
-							]
-						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -455,9 +431,51 @@
 							"host": [
 								"localhost"
 							],
+							"port": "8888",
 							"path": [
 								"api",
 								"upload"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Upload Image No Token",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "upload",
+									"type": "file",
+									"src": "/Users/macfaz/Downloads/IMG_1883.JPG"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost/api/upload/no_token",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8888",
+							"path": [
+								"api",
+								"upload",
+								"no_token"
 							]
 						}
 					},

@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "7b503aa3-7092-4e46-83af-54b166883fb2",
+		"_postman_id": "118e0331-9f2f-4e63-8ad0-f8b2074334fd",
 		"name": "ispace api",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "15988769"
+		"_exporter_id": "1720888"
 	},
 	"item": [
 		{
@@ -67,6 +67,19 @@
 								"logout"
 							]
 						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Maklumbalas",
+			"item": [
+				{
+					"name": "Create Maklumbalas",
+					"request": {
+						"method": "GET",
+						"header": []
 					},
 					"response": []
 				}
@@ -192,7 +205,7 @@
 				"bearer": [
 					{
 						"key": "token",
-						"value": "$2y$10$CpMYwLc38MdT7e2nKb1V/.NZLLY.ewBXNiv1gIUijPIqJvC21Awua",
+						"value": "$2y$10$OLcG3VL4DQxcAziux3.NjuW.IJeFqesIzeV5jjehSO5h.KwHlAVbq",
 						"type": "string"
 					}
 				]
@@ -422,6 +435,47 @@
 							"path": [
 								"api",
 								"upload"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Upload Image No Token",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "upload",
+									"type": "file",
+									"src": "/Users/macfaz/Downloads/IMG_1883.JPG"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8888/api/upload/no_token",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8888",
+							"path": [
+								"api",
+								"upload",
+								"no_token"
 							]
 						}
 					},

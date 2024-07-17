@@ -1,8 +1,8 @@
 <?php
 
-class NewsController
+class FeedbackController
 {
-    public function __construct( private NewsGateway $gateway )
+    public function __construct( private FeedbackGateway $gateway )
     {
     }
 
@@ -19,17 +19,17 @@ class NewsController
 
     private function processResourceRequest( string $method, string $id ): void
     {
-        $news = $this -> gateway -> get( $id );
+        $maklumbalas = $this -> gateway -> get( $id );
         
-        if ( !$news ) {
+        if ( !$maklumbalas ) {
             http_response_code( 404 );
-            echo json_encode([ "message" => "News not found" ]);
+            echo json_encode([ "message" => "Maklumbalas not found" ]);
             return;
         }
         
         switch ( $method ) {
             case "GET":
-                echo json_encode( $news );
+                echo json_encode( $maklumbalas );
                 break;
                 
             case "PATCH":
@@ -45,7 +45,7 @@ class NewsController
                     // convert json to array of params
                     $data = json_decode( $data, true );
     
-                    $rows = $this -> gateway -> update( $news, $data );
+                    $rows = $this -> gateway -> update( $maklumbalas, $data );
     
                     echo json_encode([
                         "id" => $id,
@@ -100,10 +100,10 @@ class NewsController
             case "POST":
 
                 // Check Authorization
-                $authorization = $this -> checkAuthorization();
+                // $authorization = $this -> checkAuthorization();
                 // echo json_encode([ "Authorization" => $authorization ]);
 
-                if( $authorization ) {
+                // if( $authorization ) {
                     $_POST = json_decode( file_get_contents( "php://input" ), true );
                     $data = ( array ) $_POST;
                     
@@ -112,14 +112,14 @@ class NewsController
                     http_response_code( 201 );
                     echo json_encode([
                         "id" => $id,
-                        "message" => "News is created successfully!",
+                        "message" => "Maklumbalas is created successfully!",
                     ]);
-                }
+                // }
 
-                else {
-                    http_response_code( 401 );
-                    echo json_encode([ "message" => "Unauthorized" ]);
-                }
+                // else {
+                //     http_response_code( 401 );
+                //     echo json_encode([ "message" => "Unauthorized" ]);
+                // }
                 break;
             
             default:
@@ -134,21 +134,30 @@ class NewsController
         $headers = getallheaders();
         // echo json_encode([ "Headers" => $headers ]);
 
-        if ( !array_key_exists( 'authorization', $headers )) {
-            http_response_code( 501 );
+        if ( !array_key_exists( 'Authorization', $headers )) {
+            http_response_code( 404 );
             echo json_encode([ "message" => "Authorization header is missing" ]);
             exit;
         }
 
         else {
-            $token = trim( substr( $headers[ 'authorization' ], 6 ));
-            // echo json_encode([ "token" => $token ]);
+            if ( substr( $headers[ 'Authorization' ], 0, 7) !== 'Bearer ' ) {
 
-            $data = $this -> gateway -> getToken( $token );
-            // echo json_encode([ "ID: " => $data ]);
+                http_response_code( 404 );
+                echo json_encode([ "message" => "Bearer keyword is missing" ]);
+                exit;
+            }
 
-            if( $data ) {
-                return $data;
+            else {
+                $token = trim( substr( $headers[ 'Authorization' ], 6 ));
+                // echo json_encode([ "token" => $token ]);
+
+                $data = $this -> gateway -> getToken( $token );
+                // echo json_encode([ "ID: " => $data ]);
+
+                if( $data ) {
+                    return $data;
+                }
             }
         }
 

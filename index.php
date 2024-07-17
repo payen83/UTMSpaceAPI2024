@@ -14,15 +14,6 @@
     set_error_handler( "ErrorHandler::handleError" );
     set_exception_handler( "ErrorHandler::handleException" );
 
-    // Change to JSON Type
-    // header( "Access-Control-Allow-Origin: *" );
-    // header( "Access-Control-Allow-Headers: *" );
-
-    // header( "Access-Control-Allow-Origin: *" );
-    // header( "Content-Type: application/json; charset=UTF-8" );
-    // header( "Access-Control-Allow-Methods: OPTIONS,GET,POST,PUT,DELETE" );
-    // header( "Access-Control-Max-Age: 3600" );
-    // header( "Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With" );
     header('Access-Control-Allow-Origin: *'); // Adjust this to match your actual domain, using '*' is less secure
     header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS'); // Adjust based on your needs
     header('Access-Control-Allow-Headers: X-Requested-With, Content-Type, Accept, Origin, Authorization'); // Add any other headers you need to support
@@ -53,8 +44,9 @@
     $id = $parts[ 3 ] ?? null;
 
     // Database
-    $database = new Database( "localhost", "ispaceDB", "root", "" ); // TODO: Put Info in Config
+    $database = new Database( "localhost", "ispaceDB", "root", "root" ); // TODO: Put Info in Config
     $news_gateway = new NewsGateway( $database );
+    $feedback_gateway = new FeedbackGateway( $database );
     $staff_gateway = new StaffGateway( $database );
     $upload_gateway = new UploadGateway( $database );
     $login_gateway = new LoginGateway( $database );
@@ -62,6 +54,7 @@
 
     // Controller
     $news_controller = new NewsController( $news_gateway );
+    $feedback_controller = new FeedbackController( $feedback_gateway );
     $staff_controller = new StaffController( $staff_gateway );
     $upload_controller = new UploadController( $upload_gateway );
     $login_controller = new LoginController( $login_gateway );
@@ -71,6 +64,13 @@
         header( "Content-type: application/json; charset=UTF-8" );
 
         $news_controller -> processRequest( $_SERVER[ "REQUEST_METHOD" ], $id );
+        exit;
+    }
+
+    else if ( $parts[ 2 ] === "maklumbalas" ) {
+        header( "Content-type: application/json; charset=UTF-8" );
+
+        $feedback_controller -> processRequest( $_SERVER[ "REQUEST_METHOD" ], $id );
         exit;
     }
 
