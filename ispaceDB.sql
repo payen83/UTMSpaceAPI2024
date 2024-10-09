@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:8889
--- Generation Time: Jul 17, 2024 at 12:48 PM
+-- Generation Time: Oct 08, 2024 at 10:19 AM
 -- Server version: 5.7.39
 -- PHP Version: 8.2.0
 
@@ -20,31 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `ispaceDB`
 --
-
--- --------------------------------------------------------
-
---
--- Table structure for table `maklumbalas`
---
-
-CREATE TABLE `maklumbalas` (
-  `id` int(11) NOT NULL,
-  `nama` varchar(200) NOT NULL,
-  `tel` varchar(128) NOT NULL,
-  `kategori` varchar(128) NOT NULL,
-  `feedback` varchar(512) NOT NULL,
-  `image_url` varchar(128) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `maklumbalas`
---
-
-INSERT INTO `maklumbalas` (`id`, `nama`, `tel`, `kategori`, `feedback`, `image_url`) VALUES
-(1, 'test555', '0192239944', 'Wabak', 'Ini adalah feedback', '/images/202462472324-V1fTmE.jpg'),
-(2, 'Haron Ahmad', '0192239944', 'Semburan', 'Semburan dengue di Sentul', ''),
-(3, 'Ahmad Albab', '0198873722', '[\"Tempat Pembiakan\",\"Semburan dan Fogging\"]', '', '/images/2024716224744-hy9ERJ.jpg'),
-(4, 'Jason statham', '0198873733', '[\"Tempat Pembiakan\",\"Lain-lain\"]', 'Terdapat beberapa kes dengue di sini', '/images/2024716225048-toudw9.jpeg');
 
 -- --------------------------------------------------------
 
@@ -66,11 +41,10 @@ CREATE TABLE `news` (
 --
 
 INSERT INTO `news` (`id`, `image_url`, `title`, `description`, `location`, `date`) VALUES
-(1, 'https://utmspace.edu.my/wp-content/uploads/2022/10/sembang-space.jpg', 'Explore endless education opportunities at our SPACE UTM Edu Fair!', 'UTMSPACE salah sebuah entiti di bawah naungan Universiti Teknologi Malaysia akan membuka pintu kepada umum bagi penganjuran SPACE UTM EDU FAIR 2024 pada bulan Jun.', 'johor bahru', '2024-05-27'),
-(10, 'https://utmspace.edu.my/wp-content/uploads/2022/10/stareducationfair.jpg', 'Star Education Fair 2022', 'Choose the right institution to secure your future at the most awaited education fair, Join us this 12 & 13 November at Tropicana Gardens Mall! Meet us at booth A33! Visit the link to register! ', 'Tropicana Gardens Mall', '2024-05-06'),
-(11, 'https://utmspace.edu.my/wp-content/uploads/2022/10/28oct1.jpg', 'Program Professional Certificate in Advances of Long Range Surveillance Radar', 'Program Professional Certificate in Advances of Long Range Surveillance Radar & Wireless Data Link telah pun berjalan pada 17 Oktober dan akan berlangsung sehingga 28 Oktober 2022 bertempat di UTM/UTMSPACE Johor Bahru dan TUDM Bukit Lunchu', 'TUDM Bukit Lunchu', '2024-05-22'),
-(12, 'https://news.utmspace.edu.my/wp-content/uploads/2024/05/AKKP.jpg', 'UTMSpace Training', 'This is a training for UTMSpace', 'Taman Universiti', '2024-06-25'),
-(13, '/images/202462472324-V1fTmE.jpg', 'test555', 'news28', 'news28', '2026-06-28');
+(1, 'https://news.utmspace.edu.my/wp-content/uploads/2023/12/CMUMC1-2.jpg', 'Explore endless education opportunities at our SPACE UTM Edu Fair!', 'UTMSPACE salah sebuah entiti di bawah naungan Universiti Teknologi Malaysia akan membuka pintu kepada umum bagi penganjuran SPACE UTM EDU FAIR 2024 pada bulan Jun.', 'johor bahru', '2024-05-27'),
+(61, 'https://news.utmspace.edu.my/wp-content/uploads/2024/05/AKKP.jpg', 'PENGAUDITAN ANUGERAH KESELAMATAN & KESIHATAN PEKERJAAN(AKKP) 2023 UTMSPACE', 'Johor Bahru, 13 Mei 2024 : Pihak OSHE UTM telah menjalankan sesi pengauditan AKKP 2023 terhadap UTMSPACE bagi kategori Kluster, UTM Johor. Seramai 8 orang auditor yang diketuai oleh Ts. Dr. Hadafi Fitri bin Mohd Latip manakala UTMSPACE diwakili oleh Ahli JKKP UTMSPACE Johor Bahru yang diketuai oleh Ts. Nik Maria bin Nik Mahamood.  Berikut adalah maklumat pengauditan.', 'Media Centre', '2024-10-01'),
+(62, 'https://news.utmspace.edu.my/wp-content/uploads/2024/02/mou-msnj-dan-utmspace2.jpg', 'UTMSPACE dan MSNJ Memperkasa Pendidikan Tinggi Dalam Bidang Sukan Negeri Johor.', '13 Feb. 2024, Johor Bahru – Memorandum Persefahaman (MoU) dimeterai antara UTMSPACE dan Majlis Sukan Negeri Johor (MSNJ) yang telah ditandatangani oleh Prof Ts. Dr Nazri bin Ali, Ketua Pegawai Eksekutif dan Pengarah Urusan UTMSPACE | Dekan SPACE UTM dan Ybrs. Ts Mohd Ekmaluddin bin Ishak, Pengarah MSNJ. Sesi menandatangani MoU tersebut disaksikan oleh Menteri Besar Johor, Yang Amat Berhormat Dato’ Onn Hafiz bin Ghani pada Majlis Countdown SUKAM Johor “SUKMA 2024: The Next Chapter” di Pusat Akuatik Majlis Bandaraya Johor Bahru, Arena Larkin.', 'UTMSpace JB', '2024-02-24'),
+(63, 'https://news.utmspace.edu.my/wp-content/uploads/2024/02/WhatsApp-Image-2024-02-13-at-2.57.26-PM1-2048x1367.jpeg', 'COURTESY VISIT FROM UNIVERSITY GEOMATIKA MALAYSIA', '13 Februari 2024 – A delegation from University Geomatika Malaysia (UGM) headed by its Vice Chancellor, Prof Sr. Dr. Mohd Zulkifli bin Mohd Yunos visited UTMSPACE . CEO and Managing Director of UTMSPACE, Prof Dr Nazri bin Ali, and UTMSPACE management welcomed the visit. Among matters discussed are collaboration in offering professional development programs and franchising UTM programs. UTMSPACE is interested to explore UGM TVET programs especially in hospitality and lifestyle.', 'UTMSpace Kuala Lumpur', '2024-03-07');
 
 -- --------------------------------------------------------
 
@@ -86,28 +60,33 @@ CREATE TABLE `staff` (
   `password` longtext NOT NULL,
   `first_name` text,
   `last_name` text,
+  `ic` text,
+  `address` longtext,
   `position` text,
   `department` text,
   `phone_no` text,
-  `birth_date` date DEFAULT NULL
+  `birth_date` date DEFAULT NULL,
+  `self_report_date` date DEFAULT NULL,
+  `self_report_location` longtext,
+  `self_report_letter` text,
+  `self_report_document` text,
+  `tentative_program` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `staff`
 --
 
-INSERT INTO `staff` (`id`, `token`, `image_url`, `email`, `password`, `first_name`, `last_name`, `position`, `department`, `phone_no`, `birth_date`) VALUES
-(1, '$2y$10$OLcG3VL4DQxcAziux3.NjuW.IJeFqesIzeV5jjehSO5h.KwHlAVbq', NULL, 'test1@email.com', '$2y$10$Fxo9gjUVyG1mPwfpKctCKOMOqhHX1szepP8ZUDzVmYrm3K1P1elg6', 'test1', 'Tested1', 'tester1', 'Testing1', '1111111111', '1991-01-01');
+INSERT INTO `staff` (`id`, `token`, `image_url`, `email`, `password`, `first_name`, `last_name`, `ic`, `address`, `position`, `department`, `phone_no`, `birth_date`, `self_report_date`, `self_report_location`, `self_report_letter`, `self_report_document`, `tentative_program`) VALUES
+(1, '', 'https://picsum.photos/id/2/200/300', 'test1@email.com', '$2y$10$Fxo9gjUVyG1mPwfpKctCKOMOqhHX1szepP8ZUDzVmYrm3K1P1elg6', 'Ahmad', 'Khairul', '881220-06-5457', 'No 93, Apartment Rose, Jalan Kuala Langat, 55670, Selangor.', 'HR manager', 'Human Resources', '0123235567', '1991-01-01', NULL, NULL, NULL, NULL, NULL),
+(4, NULL, 'https://picsum.photos/id/11/200/300', 'test2@email.com', '$2y$10$xV6IDx1MqrAvZhswXVZ6J.aaIRdw458TLwSaKBvdISqq9B/Pan13W', 'Nurul Huda', 'Abidin', '900323-01-6788', 'No 123 Kampung Gambut, Jalan Kota Lama, 23500, Bukit Senapang, Pahang.', 'Accountant', 'Accounting', '0113447890', '1991-02-02', NULL, NULL, NULL, NULL, NULL),
+(5, NULL, 'https://picsum.photos/id/20/200/300', 'test4@email.com', '$2y$10$bvAfCfIhjzg7tLDAPGABmO82SECRXROaKgO4m6aocMu3qU.uiz6di', 'Mohamad Jainuddin', 'Wan Hisyam', '870928-07-4569', 'No 9878 Kampung Parit Baru, Jalan Bukit Bukau, 67000, Kota Tinggi, Terengganu.', 'Sales Assistant', 'Sales', '0167884521', '1991-03-03', NULL, NULL, NULL, NULL, NULL),
+(6, NULL, 'https://picsum.photos/id/29/200/300', 'test5@email.com', '$2y$10$TY5uQkmCfJiMzwctKSUmku04TJw3pEgUmanv4gxKUG6AAn4DkmIfi', 'Abdul Halim', 'Samsudin', '900102-06-5456', 'No 999 Jalan Makmur, Bangi Lama, 34770, Pulau Pinang.', 'Sales Manager', 'Sales', '0125567878', '1991-03-03', NULL, NULL, NULL, NULL, NULL),
+(7, NULL, 'https://picsum.photos/id/58/200/300', 'halimah@gmail.com', '$2y$10$6ZJE1Y71WWk3DSCQGREOTux4ryx2HjFtBMfCbnRKrwg.VFmmMdn/u', 'Noor Halimah', 'Abu Bakar', '900102-06-5456', 'No 999 Jalan Makmur, Kota Lama, 44500, Johor.', 'HR', 'Human Resource', '0192239403', '1991-03-03', NULL, NULL, NULL, NULL, NULL);
 
 --
 -- Indexes for dumped tables
 --
-
---
--- Indexes for table `maklumbalas`
---
-ALTER TABLE `maklumbalas`
-  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `news`
@@ -128,22 +107,16 @@ ALTER TABLE `staff`
 --
 
 --
--- AUTO_INCREMENT for table `maklumbalas`
---
-ALTER TABLE `maklumbalas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
 -- AUTO_INCREMENT for table `news`
 --
 ALTER TABLE `news`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
 
 --
 -- AUTO_INCREMENT for table `staff`
 --
 ALTER TABLE `staff`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

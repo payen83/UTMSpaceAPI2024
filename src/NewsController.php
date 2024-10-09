@@ -134,14 +134,16 @@ class NewsController
         $headers = getallheaders();
         // echo json_encode([ "Headers" => $headers ]);
 
-        if ( !array_key_exists( 'authorization', $headers )) {
+        $authorization = $headers[ 'authorization' ] ?? $headers[ 'Authorization' ];
+
+        if ( !$authorization ) {
             http_response_code( 501 );
             echo json_encode([ "message" => "Authorization header is missing" ]);
             exit;
         }
 
         else {
-            $token = trim( substr( $headers[ 'authorization' ], 6 ));
+            $token = trim( substr( $authorization, 6 ));
             // echo json_encode([ "token" => $token ]);
 
             $data = $this -> gateway -> getToken( $token );

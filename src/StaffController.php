@@ -6,13 +6,13 @@ class StaffController
     {
     }
 
-    public function processRequest( string $method, ?string $id ): void
+    public function processRequest( string $method, ?string $id, ?string $ic ): void
     {
         if ( $id ) {
             $this -> processResourceRequest( $method, $id );
 
         } else {
-            $this -> processCollectionRequest( $method );
+            $this -> processCollectionRequest( $method, $ic );
             
         }
     }
@@ -88,13 +88,33 @@ class StaffController
         }
     }
     
-    private function processCollectionRequest( string $method ): void
+    private function processCollectionRequest( string $method, ?string $ic  ): void
     {
         switch ( $method ) {
             case "GET":
-                // echo json_encode( [ "id" => 123, "name" => "Jamil" ]);
-                // echo json_encode( $this-> gateway -> getAll() );
-                echo json_encode( mb_convert_encoding( $this-> gateway -> getAll(), 'UTF-8', 'UTF-8'), JSON_THROW_ON_ERROR );
+
+                if( $ic !== null ) {
+                    $icAlt = str_replace( "-", "", $ic );
+                    $icNew = substr( $icAlt, 0, 6 ) . '-' . substr( $icAlt, 6, 2 ) . '-' . substr( $icAlt, 8 );
+
+                    $staff = $this -> gateway -> searchIC( $icNew );
+                    // echo json_encode( [ "IC" => $staff ]);
+
+                    if( $staff ) {
+                        echo json_encode( mb_convert_encoding( $staff, 'UTF-8', 'UTF-8'), JSON_THROW_ON_ERROR );
+                    }
+
+                    else {
+                        http_response_code( 200 );
+                        echo json_encode([ "message" => "Staff not found!" ]);
+                    }
+                }
+
+                else {
+                    // echo json_encode( [ "id" => 123, "name" => "Jamil" ]);
+                    // echo json_encode( $this-> gateway -> getAll() );
+                    echo json_encode( mb_convert_encoding( $this-> gateway -> getAll(), 'UTF-8', 'UTF-8'), JSON_THROW_ON_ERROR );
+                }
                 break;
 
             case "POST":
@@ -144,30 +164,23 @@ class StaffController
         $headers = getallheaders();
         // echo json_encode([ "Headers" => $headers ]);
 
-        if ( !array_key_exists( 'Authorization', $headers )) {
+        $authorization = $headers[ 'authorization' ] ?? $headers[ 'Authorization' ];
+
+        if ( !$authorization ) {
             http_response_code( 404 );
             echo json_encode([ "message" => "Authorization header is missing" ]);
             exit;
         }
 
         else {
-            if ( substr( $headers[ 'Authorization' ], 0, 7) !== 'Bearer ' ) {
+            $token = trim( substr( $authorization, 6 ));
+            // echo json_encode([ "token" => $token ]);
 
-                http_response_code( 404 );
-                echo json_encode([ "message" => "Bearer keyword is missing" ]);
-                exit;
-            }
+            $data = $this -> gateway -> getToken( $token );
+            // echo json_encode([ "ID: " => $data ]);
 
-            else {
-                $token = trim( substr( $headers[ 'Authorization' ], 6 ));
-                // echo json_encode([ "token" => $token ]);
-
-                $data = $this -> gateway -> getToken( $token );
-                // echo json_encode([ "ID: " => $data ]);
-
-                if( $data ) {
-                    return $data;
-                }
+            if( $data ) {
+                return $data;
             }
         }
 

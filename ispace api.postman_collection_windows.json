@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "118e0331-9f2f-4e63-8ad0-f8b2074334fd",
-		"name": "ispace api",
+		"_postman_id": "deccb31c-9360-48cb-8e86-074b044dd109",
+		"name": "ispace api Windows",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "1720888"
 	},
@@ -16,7 +16,12 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\" : \"test1@email.com\",\n    \"password\": \"test1234\"\n}"
+							"raw": "{\n    \"email\" : \"test1@email.com\",\n    \"password\": \"test1234\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
 						"url": {
 							"raw": "http://localhost/api/login",
@@ -24,7 +29,6 @@
 							"host": [
 								"localhost"
 							],
-							"port": "8888",
 							"path": [
 								"api",
 								"login"
@@ -61,25 +65,11 @@
 							"host": [
 								"localhost"
 							],
-							"port": "8888",
 							"path": [
 								"api",
 								"logout"
 							]
 						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Maklumbalas",
-			"item": [
-				{
-					"name": "Create Maklumbalas",
-					"request": {
-						"method": "GET",
-						"header": []
 					},
 					"response": []
 				}
@@ -99,7 +89,6 @@
 							"host": [
 								"localhost"
 							],
-							"port": "8888",
 							"path": [
 								"api",
 								"news"
@@ -119,7 +108,6 @@
 							"host": [
 								"localhost"
 							],
-							"port": "8888",
 							"path": [
 								"api",
 								"news",
@@ -136,7 +124,12 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"image_url\" : \"/images/202462472324-V1fTmE.jpg\",\n    \"title\" : \"news28\",\n    \"description\": \"news28\",\n    \"location\": \"news28\",\n    \"date\": \"2026-06-28\"\n}"
+							"raw": "{\n    \"image_url\" : \"\",\n    \"title\" : \"15\",\n    \"description\": \"15\",\n    \"location\": \"15\",\n    \"date\": \"2025-01-15\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
 						"url": {
 							"raw": "http://localhost/api/news",
@@ -144,7 +137,6 @@
 							"host": [
 								"localhost"
 							],
-							"port": "8888",
 							"path": [
 								"api",
 								"news"
@@ -160,7 +152,12 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"title\" : \"news8\",\n    \"description\": \"news8\",\n    \"location\": \"news8\",\n    \"date\": \"2024-01-01\"\n}"
+							"raw": "{\n    \"title\" : \"news8\",\n    \"description\": \"news8\",\n    \"location\": \"news8\",\n    \"date\": \"2024-01-01\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
 						"url": {
 							"raw": "http://localhost/api/news/12",
@@ -168,7 +165,6 @@
 							"host": [
 								"localhost"
 							],
-							"port": "8888",
 							"path": [
 								"api",
 								"news",
@@ -189,7 +185,6 @@
 							"host": [
 								"localhost"
 							],
-							"port": "8888",
 							"path": [
 								"api",
 								"news",
@@ -205,7 +200,7 @@
 				"bearer": [
 					{
 						"key": "token",
-						"value": "$2y$10$OLcG3VL4DQxcAziux3.NjuW.IJeFqesIzeV5jjehSO5h.KwHlAVbq",
+						"value": "{{token}}",
 						"type": "string"
 					}
 				]
@@ -242,16 +237,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost/api/staff/1",
+							"raw": "http://localhost/api/staff/6",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8888",
 							"path": [
 								"api",
 								"staff",
-								"1"
+								"6"
 							]
 						}
 					},
@@ -263,15 +257,71 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost/api/staff",
+							"raw": "http://localhost/api/staff?ic=900102-06-5456",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8888",
 							"path": [
 								"api",
 								"staff"
+							],
+							"query": [
+								{
+									"key": "ic",
+									"value": "900102-06-5456"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Generate Pdf",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/api/generate?ic=900102-06-5456",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"generate"
+							],
+							"query": [
+								{
+									"key": "ic",
+									"value": "900102-06-5456"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Download Pdf",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/api/download",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"download"
+							],
+							"query": [
+								{
+									"key": "ic",
+									"value": "900102-06-5456",
+									"disabled": true
+								}
 							]
 						}
 					},
@@ -284,7 +334,12 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\" : \"test4@email.com\",\n    \"password\": \"test1234\",\n    \"first_name\": \"test3\",\n    \"last_name\": \"Tested3\",\n    \"position\" : \"tester3\",\n    \"department\": \"Testing3\",\n    \"phone_no\": \"3333333333\",\n    \"birth_date\": \"1991-03-03\"\n}"
+							"raw": "{\n    \"email\": \"test5@email.com\",\n    \"password\": \"test1234\",\n    \"first_name\": \"test5\",\n    \"last_name\": \"Tested5\",\n    \"ic\": \"900102-06-5456\",\n    \"address\": \"No 555 Jalan Makmur\",\n    \"position\": \"tester5\",\n    \"department\": \"Testing5\",\n    \"phone_no\": \"5555555555\",\n    \"birth_date\": \"1995-05-05\",\n    \"self_report_date\": \"2024-05-05\",\n    \"self_report_location\": \"Taman Bunga\",\n    \"self_report_letter\": \"\",\n    \"self_report_document\": \"\",\n    \"tentative_program\": \"\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
 						"url": {
 							"raw": "http://localhost/api/staff",
@@ -292,7 +347,6 @@
 							"host": [
 								"localhost"
 							],
-							"port": "8888",
 							"path": [
 								"api",
 								"staff"
@@ -308,7 +362,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"first_name\" : \"staff5\"\n}",
+							"raw": "{\n    \"tentative_program\" : \"program5\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -316,16 +370,15 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost/api/staff/5",
+							"raw": "http://localhost/api/staff/6",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8888",
 							"path": [
 								"api",
 								"staff",
-								"5"
+								"6"
 							]
 						}
 					},
@@ -342,7 +395,6 @@
 							"host": [
 								"localhost"
 							],
-							"port": "8888",
 							"path": [
 								"api",
 								"staff",
@@ -358,7 +410,7 @@
 				"bearer": [
 					{
 						"key": "token",
-						"value": "$2y$10$CpMYwLc38MdT7e2nKb1V/.NZLLY.ewBXNiv1gIUijPIqJvC21Awua",
+						"value": "{{token}}",
 						"type": "string"
 					}
 				]
@@ -400,7 +452,6 @@
 							"host": [
 								"localhost"
 							],
-							"port": "8888",
 							"path": [
 								"api",
 								"images",
@@ -431,51 +482,9 @@
 							"host": [
 								"localhost"
 							],
-							"port": "8888",
 							"path": [
 								"api",
 								"upload"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Upload Image No Token",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "upload",
-									"type": "file",
-									"src": "/Users/macfaz/Downloads/IMG_1883.JPG"
-								}
-							]
-						},
-						"url": {
-							"raw": "http://localhost/api/upload/no_token",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8888",
-							"path": [
-								"api",
-								"upload",
-								"no_token"
 							]
 						}
 					},
@@ -487,7 +496,94 @@
 				"bearer": [
 					{
 						"key": "token",
-						"value": "$2y$10$CpMYwLc38MdT7e2nKb1V/.NZLLY.ewBXNiv1gIUijPIqJvC21Awua",
+						"value": "{{token}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Files",
+			"item": [
+				{
+					"name": "Download Pdf",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost/api/files/2024926145434-i5fh7M.pdf",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"files",
+								"2024926145434-i5fh7M.pdf"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Upload File",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/Users/elyzian/Downloads/Sample/sample-pdf.pdf"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost/api/files/upload",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"path": [
+								"api",
+								"files",
+								"upload"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{token}}",
 						"type": "string"
 					}
 				]

@@ -32,40 +32,33 @@ class LogoutController
                 $headers = getallheaders();
                 // echo json_encode([ "Headers" => $headers ]);
 
-                if ( !array_key_exists( 'Authorization', $headers )) {
-                    http_response_code( 404 );
+                $authorization = $headers[ 'authorization' ] ?? $headers[ 'Authorization' ];
+
+                if ( !$authorization ) {
+                    http_response_code( 501 );
                     echo json_encode([ "message" => "Authorization header is missing" ]);
                     exit;
                 }
 
                 else {
-                    if ( substr( $headers[ 'Authorization' ], 0, 7) !== 'Bearer ' ) {
+                    $token = trim( substr( $authorization, 6 ));
+                    // echo json_encode([ "token" => $token ]);
 
-                        http_response_code( 404 );
-                        echo json_encode([ "message" => "Bearer keyword is missing" ]);
-                        exit;
+                    $data = $this -> gateway -> get( $token );
+                    // echo json_encode([ "ID: " => $data ]);
+                    
+                    if( $data ) {
+                        $result = $this -> gateway -> logout( $data[ "id" ]);
+                        // echo json_encode([ "Result: " => $result ]);
+
+                        if( $result ) {
+                            echo json_encode([ "message" => "Logout successful!" ]);
+                        }
                     }
 
                     else {
-                        $token = trim( substr( $headers[ 'Authorization' ], 6 ));
-                        // echo json_encode([ "token" => $token ]);
-
-                        $data = $this -> gateway -> get( $token );
-                        // echo json_encode([ "ID: " => $data ]);
-                        
-                        if( $data ) {
-                            $result = $this -> gateway -> logout( $data[ "id" ]);
-                            // echo json_encode([ "Result: " => $result ]);
-
-                            if( $result ) {
-                                echo json_encode([ "message" => "Logout successful!" ]);
-                            }
-                        }
-
-                        else {
-                            http_response_code( 401 );
-                            echo json_encode([ "message" => "Unauthorized" ]);
-                        }
+                        http_response_code( 401 );
+                        echo json_encode([ "message" => "Unauthorized" ]);
                     }
                 }
                 break;

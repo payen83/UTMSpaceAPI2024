@@ -44,30 +44,38 @@ class LoginController
                 $password = $this -> gateway -> getPassword( $data );
                 // echo json_encode([ "Staff DATA" => $staff ]);
 
-                // Verify Password
-                $verify = password_verify( $data[ "password" ], $password[ "password" ]);
-                // echo json_encode([ "Verify: " => $verify ]);
+                if( $password ) {
 
-                if( $verify ) {
-                    $token = password_hash( $data[ "password" ], PASSWORD_DEFAULT );
-                    // echo json_encode([ "Token: " => $token ]);
-
-                    $staff = $this -> gateway -> get( $data );
-                    $result = $this -> gateway -> token( $token, $staff[ "id" ]);
-                    // echo json_encode([ "Row: " => $result ]);
-
-                    if( $result ) {
-                        http_response_code( 201 );
-                        echo json_encode([
-                            "token" => $token,
-                            "staff" => $staff
-                        ]);
+                    // Verify Password
+                    $verify = password_verify( $data[ "password" ], $password[ "password" ]);
+                    // echo json_encode([ "Verify: " => $verify ]);
+    
+                    if( $verify ) {
+                        $token = password_hash( $data[ "password" ], PASSWORD_DEFAULT );
+                        // echo json_encode([ "Token: " => $token ]);
+    
+                        $staff = $this -> gateway -> get( $data );
+                        $result = $this -> gateway -> token( $token, $staff[ "id" ]);
+                        // echo json_encode([ "Row: " => $result ]);
+    
+                        if( $result ) {
+                            http_response_code( 201 );
+                            echo json_encode([
+                                "token" => $token,
+                                "staff" => $staff
+                            ]);
+                        }
+                    }
+    
+                    else {
+                        http_response_code( 404 );
+                        echo json_encode([ "message" => "Invalid Password" ]);
                     }
                 }
-
+                
                 else {
                     http_response_code( 404 );
-                    echo json_encode([ "message" => "Invalid Password" ]);
+                    echo json_encode([ "message" => "Invalid Email" ]);
                 }
                 break;
             
