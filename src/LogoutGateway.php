@@ -8,8 +8,7 @@ class LogoutGateway
         $this -> conn = $database -> getConnection();
     }
 
-    public function get( string $token ): array | false {
-
+    public function checkToken( string $token ): array | false {
         // Get Id Inside Table By token
         $sql = "SELECT id, token
                 FROM staff
@@ -26,7 +25,6 @@ class LogoutGateway
     }
 
     public function logout( string $id ): int {
-
         // Update Data Inside Database
         $sql = "UPDATE staff
                 SET token = :token

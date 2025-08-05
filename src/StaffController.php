@@ -22,69 +22,131 @@ class StaffController
         $staff = $this -> gateway -> get( $id );
         
         if ( !$staff ) {
+            header( "Content-Type: application/json" );
             http_response_code( 404 );
-            echo json_encode([ "message" => "Staff not found" ]);
-            return;
+            echo json_encode([
+                "status" => false,
+                "message" => "Staff data not found."
+            ]);
+            exit;
         }
         
         switch ( $method ) {
             case "GET":
-                echo json_encode( $staff );
-                break;
+                header( "Content-Type: application/json" );
+                http_response_code( 200 );
+                echo json_encode([
+                    "status" => true,
+                    "message" => "Staft data retrieved successfully.",
+                    "data" => $staff
+                ]);
+                exit;
                 
             case "PATCH":
+                header( "Content-Type: application/json" );
 
                 // Check Authorization
                 $authorization = $this -> checkAuthorization();
-                // echo json_encode([ "Authorization" => $authorization ]);
 
-                if( $authorization ) {
-                    $data = array();
-                    $data = file_get_contents( 'php://input' );
-    
-                    // convert json to array of params
-                    $data = json_decode( $data, true );
+                if( $authorization !== false ) {
+                    // Get Headers
+                    $headers = getallheaders();
+                    $contentType = $headers[ 'Content-Type' ] ?? $headers[ 'content-type' ] ?? '';
+
+                    // JSON
+                    if ( str_contains( $contentType, 'application/json' )) {
+                        $data = json_decode( file_get_contents( "php://input" ), true );
+
+                        if ( json_last_error() !== JSON_ERROR_NONE ) {
+                            http_response_code( 400 );
+                            echo json_encode([
+                                "status" => false,
+                                "message" => "Invalid JSON format."
+                            ]);
+                            exit;
+                        }
+                    } 
+                    
+                    // Form Data
+                    elseif ( str_contains( $contentType, 'multipart/form-data' )) {
+                        $rawData = file_get_contents( "php://input" );
+                        $data = $this -> parseRawMultipartFormData( $rawData, $contentType );
+                    } 
+                    
+                    // Others
+                    else {
+                        http_response_code( 400 );
+                        echo json_encode([
+                            "status" => false,
+                            "message" => "Unsupported Content-Type"
+                        ]);
+                        exit;
+                    }
     
                     $rows = $this -> gateway -> update( $staff, $data );
     
+                    http_response_code( 200 );
                     echo json_encode([
-                        "id" => $id,
-                        "count" => $rows,
+                        "status" => true,
                         "message" => "Staff is updated successfully!",
+                        "data" => [
+                            "id" => $id,
+                            "affected_rows" => $rows
+                        ]
                     ]);
+                    exit;
                 }
 
                 else {
                     http_response_code( 401 );
-                    echo json_encode([ "message" => "Unauthorized" ]);
+                    echo json_encode([
+                        "status" => false,
+                        "message" => "Unauthorized"
+                    ]);
+                    exit;
                 }
-                break;
+                exit;
                 
             case "DELETE":
+                header( "Content-Type: application/json" );
 
                 // Check Authorization
                 $authorization = $this -> checkAuthorization();
-                // echo json_encode([ "Authorization" => $authorization ]);
 
-                if( $authorization ) {
+                if( $authorization !== false ) {
                     $rows = $this -> gateway -> delete( $id );
-                    
+
+                    http_response_code( 200 );
                     echo json_encode([
-                        "id" => $id,
-                        "rows" => $rows,
-                        "message" => "Staff is deleted successfully!",
+                        "status" => true,
+                        "message" => "Staff data deleted successfully!",
+                        "data" => [
+                            "id" => $id,
+                            "affected_rows" => $rows
+                        ]
                     ]);
+                    exit;
                 }
 
                 else {
                     http_response_code( 401 );
-                    echo json_encode([ "message" => "Unauthorized" ]);
+                    echo json_encode([
+                        "status" => false,
+                        "message" => "Unauthorized"
+                    ]);
+                    exit;
                 }
-                break;
+                exit;
                 
             default:
-                http_response_code( 405 );
+                header( "Content-Type: application/json" );
                 header( "Allow: GET, PATCH, DELETE" );
+                http_response_code( 405 );
+                echo json_encode([
+                    "status" => false,
+                    "message" => "Method not allowed. Allowed methods: GET, PATCH, DELETE."
+                ]);
+                exit;
         }
     }
     
@@ -92,99 +154,161 @@ class StaffController
     {
         switch ( $method ) {
             case "GET":
+                header( "Content-Type: application/json" );
 
                 if( $ic !== null ) {
                     $icAlt = str_replace( "-", "", $ic );
                     $icNew = substr( $icAlt, 0, 6 ) . '-' . substr( $icAlt, 6, 2 ) . '-' . substr( $icAlt, 8 );
 
                     $staff = $this -> gateway -> searchIC( $icNew );
-                    // echo json_encode( [ "IC" => $staff ]);
 
                     if( $staff ) {
-                        echo json_encode( mb_convert_encoding( $staff, 'UTF-8', 'UTF-8'), JSON_THROW_ON_ERROR );
+                        http_response_code( 200 );
+                        echo json_encode([
+                            "status" => true,
+                            "message" => "Staff is found.",
+                            "data" => $staff
+                        ]);
+                        exit;
                     }
 
                     else {
-                        http_response_code( 200 );
-                        echo json_encode([ "message" => "Staff not found!" ]);
+                        http_response_code( 404 );
+                        echo json_encode([
+                            "status" => false,
+                            "message" => "Staff is not found!"
+                        ]);
+                        exit;
                     }
                 }
 
                 else {
-                    // echo json_encode( [ "id" => 123, "name" => "Jamil" ]);
-                    // echo json_encode( $this-> gateway -> getAll() );
-                    echo json_encode( mb_convert_encoding( $this-> gateway -> getAll(), 'UTF-8', 'UTF-8'), JSON_THROW_ON_ERROR );
+                    $staffList = $this-> gateway -> getAll();
+                    http_response_code( 200 );
+                    echo json_encode([
+                        "status" => true,
+                        "message" => "Staff list retrieved successfully.",
+                        "data" => $staffList
+                    ]);
+                    exit;
                 }
-                break;
+                exit;
 
             case "POST":
+                header( "Content-Type: application/json" );
 
                 // Check Authorization
                 $authorization = $this -> checkAuthorization();
-                // echo json_encode([ "Authorization" => $authorization ]);
 
-                if( $authorization ) {
-                    // $data = ( array ) $_POST;
-                    $_POST = json_decode( file_get_contents( "php://input" ), true );
-                    $data = ( array ) $_POST;
+                if( $authorization !== false ) {
+                    // Get Headers
+                    $headers = getallheaders();
+                    $contentType = $headers[ 'Content-Type' ] ?? $headers[ 'content-type' ] ?? '';
+
+                    // JSON
+                    if ( str_contains( $contentType, 'application/json' )) {
+                        $data = json_decode( file_get_contents( "php://input" ), true );
+
+                        if ( json_last_error() !== JSON_ERROR_NONE ) {
+                            http_response_code( 400 );
+                            echo json_encode([
+                                "status" => false,
+                                "message" => "Invalid JSON format."
+                            ]);
+                            exit;
+                        }
+                    } 
+                    
+                    // Form Data
+                    elseif ( str_contains( $contentType, 'multipart/form-data' )) {
+                        $data = $_POST;
+                    } 
+                    
+                    // Others
+                    else {
+                        http_response_code( 400 );
+                        echo json_encode([
+                            "status" => false,
+                            "message" => "Unsupported Content-Type"
+                        ]);
+                        exit;
+                    }
     
                     // Check Empty Field
                     $errors = $this -> getValidationErrors( $data );
-    
+
                     if( !empty( $errors )) {
                         http_response_code( 422 );
-                        echo json_encode([ "errors" => $errors ]);
-                        break;
+                        echo json_encode([
+                            "status" => false,
+                            "message" => "Validation failed.",
+                            "errors" => $errors
+                        ]);
+                        exit;
                     }
     
                     $id = $this -> gateway -> create( $data );
-    
+
                     http_response_code( 201 );
                     echo json_encode([
-                        "id" => $id,
+                        "status" => true,
                         "message" => "Staff is created successfully!",
+                        "data" => [
+                            "id" => $id,
+                            "title" => $data["first_name"] ?? null
+                        ]
                     ]);
+                    exit;
                 }
 
                 else {
                     http_response_code( 401 );
-                    echo json_encode([ "message" => "Unauthorized" ]);
+                    echo json_encode([
+                        "status" => false,
+                        "message" => "Unauthorized"
+                    ]);
+                    exit;
                 }
-                break;
+                exit;
             
             default:
-                http_response_code( 405 );
+                header("Content-Type: application/json");
                 header( "Allow: GET, POST" );
+                http_response_code( 405 );
+                echo json_encode([
+                    "status" => false,
+                    "message" => "Method not allowed. Allowed methods: GET, POST."
+                ]);
+                exit;
         }
     }
 
-    private function checkAuthorization(): array {
-
+    private function checkAuthorization(): array | false {
         // Get All Headers
         $headers = getallheaders();
-        // echo json_encode([ "Headers" => $headers ]);
-
         $authorization = $headers[ 'authorization' ] ?? $headers[ 'Authorization' ];
 
         if ( !$authorization ) {
-            http_response_code( 404 );
-            echo json_encode([ "message" => "Authorization header is missing" ]);
+            header( "Content-Type: application/json" );
+            http_response_code( 401 );
+            echo json_encode([
+                "status" => false,
+                "message" => "Authorization header is missing"
+            ]);
             exit;
         }
 
         else {
             $token = trim( substr( $authorization, 6 ));
-            // echo json_encode([ "token" => $token ]);
 
-            $data = $this -> gateway -> getToken( $token );
-            // echo json_encode([ "ID: " => $data ]);
+            $data = $this -> gateway -> checkToken( $token );
 
             if( $data ) {
                 return $data;
             }
         }
 
-        return [];
+        return false;
     }
     
     private function getValidationErrors( array $data ): array
@@ -201,6 +325,50 @@ class StaffController
         }
         
         return $errors;
+    }
+
+    function parseRawMultipartFormData(string $rawData, string $contentType): array {
+        $result = [];
+
+        // Extract boundary from content type
+        if (preg_match('/boundary=(.*)$/', $contentType, $matches)) {
+            $boundary = $matches[1];
+        } else {
+            return $result; // No boundary found
+        }
+
+        // Split data by boundary
+        $blocks = explode("--" . $boundary, $rawData);
+
+        foreach ($blocks as $block) {
+            // Ignore empty blocks or closing boundary
+            if (empty(trim($block)) || $block == "--\r\n") continue;
+
+            // Separate headers and body
+            list($rawHeaders, $body) = explode("\r\n\r\n", $block, 2);
+
+            $body = trim($body, "\r\n--");
+
+            // Parse headers
+            $headers = [];
+            foreach (explode("\r\n", $rawHeaders) as $headerLine) {
+                if (strpos($headerLine, ':') !== false) {
+                    list($name, $value) = explode(':', $headerLine, 2);
+                    $headers[strtolower(trim($name))] = trim($value);
+                }
+            }
+
+            // Look for Content-Disposition header to find the form field name
+            if (isset($headers['content-disposition'])) {
+                if (preg_match('/name="([^"]+)"/', $headers['content-disposition'], $nameMatch)) {
+                    $fieldName = $nameMatch[1];
+                    // If this is a file input, you'd handle $_FILES manually here
+                    $result[$fieldName] = $body;
+                }
+            }
+        }
+
+        return $result;
     }
 }
 

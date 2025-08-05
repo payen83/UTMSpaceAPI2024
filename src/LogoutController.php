@@ -19,70 +19,94 @@ class LogoutController
 
     private function processResourceRequest( string $method, string $id ): void
     {
+        header( "Content-Type: application/json" );
         http_response_code( 404 );
-        echo json_encode([ "message" => "Invalid url" ]);
+        echo json_encode([
+            "status" => false,
+            "message" => "Invalid URL or resource not found."
+        ]);
+        exit;
     }
     
     private function processCollectionRequest( string $method ): void
     {
         switch ( $method ) {
             case "GET":
+                header( "Content-Type: application/json" );
 
-                // Get All Headers
-                $headers = getallheaders();
-                // echo json_encode([ "Headers" => $headers ]);
+                // Check Authorization
+                $authorization = $this -> checkAuthorization();
 
-                $authorization = $headers[ 'authorization' ] ?? $headers[ 'Authorization' ];
+                if( $authorization !== false ) {
+                    $result = $this -> gateway -> logout( $authorization[ "id" ]);
 
-                if ( !$authorization ) {
-                    http_response_code( 501 );
-                    echo json_encode([ "message" => "Authorization header is missing" ]);
-                    exit;
+                    if ( $result ) {
+                        http_response_code( 200 );
+                        echo json_encode([
+                            "status" => true,
+                            "message" => "Logout successful!"
+                        ]);
+                        exit;
+                    } 
+                    
+                    else {
+                        http_response_code( 500 );
+                        echo json_encode([
+                            "status" => false,
+                            "message" => "Logout failed due to a server error."
+                        ]);
+                        exit;
+                    }
                 }
 
                 else {
-                    $token = trim( substr( $authorization, 6 ));
-                    // echo json_encode([ "token" => $token ]);
-
-                    $data = $this -> gateway -> get( $token );
-                    // echo json_encode([ "ID: " => $data ]);
-                    
-                    if( $data ) {
-                        $result = $this -> gateway -> logout( $data[ "id" ]);
-                        // echo json_encode([ "Result: " => $result ]);
-
-                        if( $result ) {
-                            echo json_encode([ "message" => "Logout successful!" ]);
-                        }
-                    }
-
-                    else {
-                        http_response_code( 401 );
-                        echo json_encode([ "message" => "Unauthorized" ]);
-                    }
+                    http_response_code( 401 );
+                    echo json_encode([
+                        "status" => false,
+                        "message" => "Unauthorized"
+                    ]);
+                    exit;
                 }
-                break;
-            
+                exit;
+
             default:
+                header( "Content-Type: application/json" );
+                header( "Allow: GET" );
                 http_response_code( 405 );
-                header( "Allow: GET, POST" );
+                echo json_encode([
+                    "status" => false,
+                    "message" => "Method not allowed. Allowed methods: GET."
+                ]);
+                exit;
         }
     }
-    
-    private function getValidationErrors( array $data ): array
-    {
-        $errors = [];
-        
-        if ( empty( $data[ "email" ])) {
-            $errors[] = "email is required";
+
+    private function checkAuthorization(): array | false {
+        // Get All Headers
+        $headers = getallheaders();
+        $authorization = $headers[ 'authorization' ] ?? $headers[ 'Authorization' ];
+
+        if ( !$authorization ) {
+            header( "Content-Type: application/json" );
+            http_response_code( 401 );
+            echo json_encode([
+                "status" => false,
+                "message" => "Authorization header is missing"
+            ]);
+            exit;
         }
 
+        else {
+            $token = trim( substr( $authorization, 6 ));
 
-        if ( empty( $data[ "password" ])) {
-            $errors[] = "password is required";
+            $data = $this -> gateway -> checkToken( $token );
+
+            if( $data ) {
+                return $data;
+            }
         }
-        
-        return $errors;
+
+        return false;
     }
 }
 

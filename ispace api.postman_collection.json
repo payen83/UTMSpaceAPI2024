@@ -11,17 +11,45 @@
 			"item": [
 				{
 					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Parse response JSON",
+									"const response = pm.response.json();",
+									"",
+									"// Check if login was successful and token exists",
+									"if (response.status === true && response.data && response.data.token) {",
+									"    // Save token to environment variable named 'token'",
+									"    pm.environment.set(\"token\", response.data.token);",
+									"    console.log(\"Token saved to environment:\", response.data.token);",
+									"} else {",
+									"    console.log(\"Login failed or token not found\");",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"email\" : \"test1@email.com\",\n    \"password\": \"test1234\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "email",
+									"value": "test1@email.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "test1234",
+									"type": "text"
 								}
-							}
+							]
 						},
 						"url": {
 							"raw": "http://localhost:8888/api/login",
@@ -44,16 +72,6 @@
 						"disableBodyPruning": true
 					},
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "",
-									"type": "string"
-								}
-							]
-						},
 						"method": "GET",
 						"header": [],
 						"body": {
@@ -74,6 +92,38 @@
 						}
 					},
 					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{token}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
 				}
 			]
 		},
@@ -127,13 +177,34 @@
 						"method": "POST",
 						"header": [],
 						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"image_url\" : \"\",\n    \"title\" : \"15\",\n    \"description\": \"15\",\n    \"location\": \"15\",\n    \"date\": \"2025-01-15\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "Test Add Form",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "This is testing using form",
+									"type": "text"
+								},
+								{
+									"key": "location",
+									"value": "Kuala Lumpur",
+									"type": "text"
+								},
+								{
+									"key": "date",
+									"value": "2025-02-02",
+									"type": "text"
+								},
+								{
+									"key": "image_url",
+									"value": "",
+									"type": "text"
 								}
-							}
+							]
 						},
 						"url": {
 							"raw": "http://localhost:8888/api/news",
@@ -156,16 +227,38 @@
 						"method": "PATCH",
 						"header": [],
 						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"title\" : \"news8\",\n    \"description\": \"news8\",\n    \"location\": \"news8\",\n    \"date\": \"2024-01-01\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "Test Update Form",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "This is update test using form",
+									"type": "text"
+								},
+								{
+									"key": "location",
+									"value": "Putrajaya",
+									"type": "text"
+								},
+								{
+									"key": "date",
+									"value": "2025-05-05",
+									"type": "text"
+								},
+								{
+									"key": "image_url",
+									"value": "",
+									"type": "text",
+									"disabled": true
 								}
-							}
+							]
 						},
 						"url": {
-							"raw": "http://localhost:8888/api/news/12",
+							"raw": "http://localhost:8888/api/news/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -174,7 +267,7 @@
 							"path": [
 								"api",
 								"news",
-								"12"
+								"1"
 							]
 						}
 					},
@@ -186,7 +279,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8888/api/news/8",
+							"raw": "http://localhost:8888/api/news/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -195,7 +288,7 @@
 							"path": [
 								"api",
 								"news",
-								"8"
+								"1"
 							]
 						}
 					},
@@ -344,13 +437,84 @@
 						"method": "POST",
 						"header": [],
 						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"email\": \"test5@email.com\",\n    \"password\": \"test1234\",\n    \"first_name\": \"test5\",\n    \"last_name\": \"Tested5\",\n    \"ic\": \"900102-06-5456\",\n    \"address\": \"No 555 Jalan Makmur\",\n    \"position\": \"tester5\",\n    \"department\": \"Testing5\",\n    \"phone_no\": \"5555555555\",\n    \"birth_date\": \"1995-05-05\",\n    \"self_report_date\": \"2024-05-05\",\n    \"self_report_location\": \"Taman Bunga\",\n    \"self_report_letter\": \"\",\n    \"self_report_document\": \"\",\n    \"tentative_program\": \"\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "first_name",
+									"value": "test5",
+									"type": "text"
+								},
+								{
+									"key": "last_name",
+									"value": "Tested5",
+									"type": "text"
+								},
+								{
+									"key": "ic",
+									"value": "900102-06-5456",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "test5@email.com",
+									"type": "text"
+								},
+								{
+									"key": "address",
+									"value": "No 555 Jalan Makmur",
+									"type": "text"
+								},
+								{
+									"key": "position",
+									"value": "tester5",
+									"type": "text"
+								},
+								{
+									"key": "department",
+									"value": "Testing5",
+									"type": "text"
+								},
+								{
+									"key": "phone_no",
+									"value": "5555555555",
+									"type": "text"
+								},
+								{
+									"key": "birth_date",
+									"value": "1995-05-05",
+									"type": "text"
+								},
+								{
+									"key": "self_report_date",
+									"value": "2024-05-05",
+									"type": "text"
+								},
+								{
+									"key": "self_report_location",
+									"value": "Taman Bunga",
+									"type": "text"
+								},
+								{
+									"key": "self_report_lettera",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "self_report_document",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "tentative_program",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "test1234",
+									"type": "text"
 								}
-							}
+							]
 						},
 						"url": {
 							"raw": "http://localhost:8888/api/staff",
@@ -373,13 +537,79 @@
 						"method": "PATCH",
 						"header": [],
 						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"tentative_program\" : \"program5\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "first_name",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "last_name",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "ic",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "address",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "position",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "department",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "phone_no",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "birth_date",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "self_report_date",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "self_report_location",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "self_report_lettera",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "self_report_document",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "tentative_program",
+									"value": "",
+									"type": "text"
 								}
-							}
+							]
 						},
 						"url": {
 							"raw": "http://localhost:8888/api/staff/6",
@@ -461,7 +691,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8888/api/images/202462472746-7rBbaC.png",
+							"raw": "http://localhost:8888/api/images/202573123305-gY5LUk.jpg",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -470,7 +700,7 @@
 							"path": [
 								"api",
 								"images",
-								"202462472746-7rBbaC.png"
+								"202573123305-gY5LUk.jpg"
 							]
 						}
 					},
@@ -565,7 +795,7 @@
 					"response": []
 				},
 				{
-					"name": "Upload File",
+					"name": "Upload Pdf",
 					"request": {
 						"method": "POST",
 						"header": [],

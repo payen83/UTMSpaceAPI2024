@@ -9,7 +9,6 @@ class LoginGateway
     }
 
     public function get( array $data ): array | false {
-
         // Get Data Inside Table By Email
         $sql = "SELECT 
                     id,
@@ -35,7 +34,6 @@ class LoginGateway
     }
 
     public function getPassword( array $data ): array | false {
-
         // Get Password Inside Table By Email
         $sql = "SELECT password
                 FROM staff
@@ -52,7 +50,6 @@ class LoginGateway
     }
 
     public function token( string $token, string $id ): int {
-
         // Update Data Inside Database
         $sql = "UPDATE staff
                 SET token = :token

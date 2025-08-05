@@ -178,18 +178,22 @@
     }
     
     else if ( $parts[ 2 ] === "images" && $id ) {
+        $file = "images/$id";
 
-        // Set Header
-        // echo $id; // Get Filename
-        $mimetype = mime_content_type( "images/$id" );
-        // echo $mimetype;
+        if (!file_exists($file)) {
+            http_response_code( 404 );
+            echo json_encode([
+                "status" => false,
+                "message" => "Image not found."
+            ]);
+            exit;
+        }
 
-        $imageData = file_get_contents( "images/$id" );
+        $mimetype = mime_content_type( $file );
 
-        // Encode image data to base64
-        $base64 = base64_encode( $imageData );
-
-        echo '<img src="data:' . $mimetype . ';base64,' . $base64 . '">';
+        header( "Content-Type: $mimetype" );
+        header( "Content-Length: " . filesize( $file ));
+        readfile( $file );
         exit;
     }
 

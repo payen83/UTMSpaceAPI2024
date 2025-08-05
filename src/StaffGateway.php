@@ -9,7 +9,6 @@ class StaffGateway
     }
     
     public function getAll(): array {
-
         // Get All Data Inside Table
         $sql = "SELECT
                     id,
@@ -42,7 +41,6 @@ class StaffGateway
     }
 
     public function get( string $id ): array | false {
-
         // Get Data Inside Table By Id
         $sql = "SELECT
                     id,
@@ -74,8 +72,7 @@ class StaffGateway
         return $data;
     }
 
-    public function getToken( string $token ): array | false {
-
+    public function checkToken( string $token ): array | false {
         // Get Id Inside Table By token
         $sql = "SELECT id, token
                 FROM staff
@@ -93,13 +90,6 @@ class StaffGateway
 
     public function create( array $data ): string {
         $hash_password = password_hash( $data[ "password" ], PASSWORD_DEFAULT );
-
-        // Print the generated hash 
-        // echo "Generated Hash Password: ".$hash_password;
-
-        // $verify = password_verify( "test123456", $hash_password );
-
-        // echo "<br>Verify Password: ".$verify;
 
         // Insert Data Into Database
         $sql = "INSERT INTO staff ( image_url, email, password, first_name, last_name, ic, address, position, department, phone_no, birth_date, self_report_date, self_report_location, self_report_letter, self_report_document, tentative_program )
@@ -130,14 +120,6 @@ class StaffGateway
     }
 
     public function update( array $current, array $new ): int {
-        // $hash_password = null;
-        // $is_password = $new[ "password" ] ?? null;
-        
-        // if( $is_password ) {
-        //     $hash_password = password_hash( $new[ "password" ], PASSWORD_DEFAULT );
-        //     // echo "Generated Hash Password: ".$hash_password;
-        // }
-
         // Update Data Inside Database
         $sql = "UPDATE staff
                 SET image_url = :image_url, email = :email, first_name = :first_name, last_name = :last_name, ic = :ic, address = :address, position = :position, department = :department, phone_no = :phone_no, birth_date = :birth_date, self_report_date = :self_report_date, self_report_location = :self_report_location, self_report_letter = :self_report_letter, self_report_document = :self_report_document, tentative_program = :tentative_program
@@ -170,7 +152,6 @@ class StaffGateway
     }
 
     public function delete( string $id ): int {
-
         // Delete Data Inside Database
         $sql = "DELETE FROM staff
                 WHERE id = :id";
@@ -185,7 +166,6 @@ class StaffGateway
     }
 
     public function searchIC( string $ic ): array | false {
-
         // Get Data Inside Table By Id
         $sql = "SELECT
                     id,

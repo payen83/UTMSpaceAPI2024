@@ -19,99 +19,117 @@ class UploadController
 
     private function processResourceRequest( string $method, string $id ): void
     {
+        header( "Content-Type: application/json" );
         http_response_code( 404 );
-        echo json_encode([ "message" => "Invalid url" ]);
+        echo json_encode([
+            "status" => false,
+            "message" => "Invalid URL or resource not found."
+        ]);
         exit;
     }
     
     private function processCollectionRequest( string $method ): void
     {
         switch ( $method ) {
-            case "GET":
-                http_response_code( 405 );
-                echo json_encode([ "message" => "Method not allowed!" ]);
-                break;
-
             case "POST":
+                header( "Content-Type: application/json" );
 
                 // Check Authorization
                 $authorization = $this -> checkAuthorization();
-                // echo json_encode([ "Authorization" => $authorization ]);
 
-                if( $authorization ) {
+                if( $authorization !== false ) {
                     $image_path = "";
                     
-                    if( $_FILES ) {
-                        if( $_FILES[ 'upload' ][ 'tmp_name' ]) {
-                            $image_path = $this -> checkImageFile( $_FILES );
-                            // echo json_encode([ "Image Path: " => $image_path ]);
+                    if ( !empty( $_FILES[ 'upload' ][ 'tmp_name' ])) {
+                        $image_path = $this -> checkImageFile( $_FILES );
 
-                            http_response_code( 201 );
-                            echo json_encode([ "image_path" => $image_path ]);
-                        }
+                        http_response_code( 201 );
+                        echo json_encode([
+                            "status" => true,
+                            "message" => "Image uploaded successfully!",
+                            "data" => [
+                                "image_path" => $image_path
+                            ]
+                        ]);
+                        exit;
                     }
 
                     else {
                         http_response_code( 404 );
-                        echo json_encode([ "message" => "Image file not found!" ]);
+                        echo json_encode([
+                            "status" => false,
+                            "message" => "Image file not found!"
+                        ]);
+                        exit;
                     }
                 }
 
                 else {
                     http_response_code( 401 );
-                    echo json_encode([ "message" => "Unauthorized" ]);
+                    echo json_encode([
+                        "status" => false,
+                        "message" => "Unauthorized!"
+                    ]);
+                    exit;
                 }
-                break;
+                exit;
             
             default:
+                header( "Content-Type: application/json" );
+                header( "Allow: POST" );
                 http_response_code( 405 );
-                header( "Allow: GET, POST" );
+                echo json_encode([
+                    "status" => false,
+                    "message" => "Method not allowed. Allowed methods: POST."
+                ]);
+                exit;
         }
     }
 
-    private function checkAuthorization(): array {
-
+    private function checkAuthorization(): array | false {
         // Get All Headers
         $headers = getallheaders();
-        // echo json_encode([ "Headers" => $headers ]);
-
         $authorization = $headers[ 'authorization' ] ?? $headers[ 'Authorization' ];
 
         if ( !$authorization ) {
-            http_response_code( 501 );
-            echo json_encode([ "message" => "Authorization header is missing" ]);
+            header( "Content-Type: application/json" );
+            http_response_code( 401 );
+            echo json_encode([
+                "status" => false,
+                "message" => "Authorization header is missing!"
+            ]);
             exit;
         }
 
         else {
             $token = trim( substr( $authorization, 6 ));
-            // echo json_encode([ "token" => $token ]);
-
-            $data = $this -> gateway -> getToken( $token );
-            // echo json_encode([ "ID: " => $data ]);
+            $data = $this -> gateway -> checkToken( $token );
 
             if( $data ) {
                 return $data;
             }
         }
 
-        return [];
+        return false;
     }
 
     private function checkImageFile( array $image ): string {
+        header( "Content-Type: application/json" );
+
         $image_name = $image[ 'upload' ][ "name" ];
         $image_type = $image[ 'upload' ][ "type" ];
         $image_tmp = $image[ 'upload' ][ 'tmp_name' ];
         $image_error = $image[ 'upload' ][ "error" ];
         $image_size = $image[ 'upload' ][ "size" ];
 
-        if (
-            !isset( $image_error ) || is_array( $image_error )
-        ) {
-            http_response_code( 404 );
-            echo json_encode([ "message" => "Invalid parameters!" ]);
-            exit;
+        if ( !isset( $image_error ) || is_array( $image_error ) ) {
             // throw new RuntimeException( 'Invalid parameters!' );
+            http_response_code( 404 );
+            echo json_encode([
+                "status" => false,
+                "message" => "Invalid parameters!"
+            ]);
+            exit;
         }
 
         switch ( $image_error ) {
@@ -122,23 +140,32 @@ class UploadController
                 break;
             case UPLOAD_ERR_INI_SIZE:
             case UPLOAD_ERR_FORM_SIZE:
-                http_response_code( 404 );
-                echo json_encode([ "message" => "Exceeded filesize limit!" ]);
-                exit;
                 // throw new RuntimeException( 'Exceeded filesize limit!' );
-            default:
                 http_response_code( 404 );
-                echo json_encode([ "message" => "Unknown errors!" ]);
+                echo json_encode([
+                    "status" => false,
+                    "message" => "Exceeded filesize limit!"
+                ]);
                 exit;
+            default:
                 // throw new RuntimeException( 'Unknown errors!' );
+                http_response_code( 404 );
+                echo json_encode([
+                    "status" => false,
+                    "message" => "Unknown errors!"
+                ]);
+                exit;
         }
     
         // Check Image Size
         if ( $image_size > 1000000000 ) {
-            http_response_code( 404 );
-            echo json_encode([ "message" => "Exceeded filesize limit!" ]);
-            exit;
             // throw new RuntimeException( 'Exceeded filesize limit!' );
+            http_response_code( 404 );
+            echo json_encode([
+                "status" => false,
+                "message" => "Exceeded filesize limit!"
+            ]);
+            exit;
         }
     
         // Check Image Type
@@ -179,10 +206,13 @@ class UploadController
         }
 
         else {
-            http_response_code( 404 );
-            echo json_encode([ "message" => "Invalid image type!" ]);
-            exit;
             // throw new RuntimeException( 'Invalid image type!' );
+            http_response_code( 404 );
+            echo json_encode([
+                "status" => false,
+                "message" => "Invalid image type!"
+            ]);
+            exit;
         }
 
         return '';

@@ -8,7 +8,7 @@ class UploadFileGateway
         $this -> conn = $database -> getConnection();
     }
 
-    public function getToken( string $token ): array | false {
+    public function checkToken( string $token ): array | false {
 
         // Get Id Inside Table By token
         $sql = "SELECT id, token
